@@ -20,7 +20,7 @@ xonsh --rc ~/git/xonsh-developer-toolkit/dev.xonshrc
 
 ## Create development environment
 
-### The fastest workflow
+### The fastest workflow to contribute to xonsh
 
 ```xsh
 mkdir -p ~/git && cd ~/git
