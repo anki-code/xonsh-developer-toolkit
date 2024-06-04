@@ -289,3 +289,15 @@ mysudo | grep 1
 ```
 
 I expect the behavior like `$(sudo -k echo 123 | grep 1)` where you can enter the password and then got captured 123. But it's not working. Tracing this in IDE is very interesting.
+
+## See also
+
+* [xonsh-developer-toolkit](https://github.com/anki-code/xonsh-developer-toolkit) - The xonsh developer toolkit contains all spectrum of instrument to develop xonsh shell.
+* [xontrib-template](https://github.com/xonsh/xontrib-template) - A template to create, packaging and promote xontrib in 5 minutes.
+* [xonsh-awesome-cli-app](https://github.com/anki-code/xonsh-awesome-cli-app) - Example of awesome cli app template for xonsh.
+* [macro](https://github.com/anki-code/xontrib-macro) - Library of the useful macro for the xonsh shell. 
+* [hist-format](https://github.com/anki-code/xontrib-hist-format) - Format xonsh history to post it to Github or another page.
+* [docker-xonsh-wrapper](https://github.com/anki-code/docker-xonsh-wrapper) - Wrap an app in docker container and catch the signals from docker using xonsh shell. 
+* [xunter](https://github.com/anki-code/xunter) - Profiling the xonsh shell code using [hunter](https://github.com/ionelmc/python-hunter).
+* [my-xonsh-fork](https://github.com/anki-code/my-xonsh-fork) - Convert your xonsh fork package name to the new.
+* [xonsh-logo](https://github.com/anki-code/xonsh-logo) - The xonsh logo, design and pictures for posts, stickers, t-shirts. 
