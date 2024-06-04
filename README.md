@@ -15,7 +15,7 @@ git clone git@github.com:anki-code/xonsh-developer-toolkit.git
 ```
 Usage:
 ```xsh
-xonsh --rc ~/git/xonsh-developer-toolkit/dev.xonshrc
+xonsh --rc ~/git/xonsh-developer-toolkit/dev.xsh
 ```
 
 ## Create development environment
@@ -128,6 +128,11 @@ python -c 'import os, signal, time; time.sleep(0.2); os.kill(os.getpid(), signal
 python -c '__import__('sys').exit(2)'  # Exiting with exit code.
 ```
 
+### Test capturing aliases
+
+```
+xonsh --rc ~/git/xonsh-developer-toolkit/callias.xsh
+```
 
 ### Test in pure Linux environment
 ```xsh
