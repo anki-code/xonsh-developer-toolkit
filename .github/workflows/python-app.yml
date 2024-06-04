@@ -25,10 +25,7 @@ jobs:
         echo $(python -V)
         python -m pip install --upgrade pip
         pip install 'xonsh[full]'
-    - name: Install awesome RC
-      run: |
-        pip install --use-pep517 .
-    - name: Test awesome RC
+    - name: Test dev.xonshrc
       run: |
         echo Testing...
         export XONSH_SHOW_TRACEBACK=True
