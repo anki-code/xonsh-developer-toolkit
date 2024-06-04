@@ -16,7 +16,7 @@ def _print_to_tty(message):
 
 
 def _printer(a,i,o,e):
-    """"""
+    """Print into all kinds of streams."""
     func_name = inspect.stack()[0][3]
     alias_name = XSH.env.get('__ALIAS_NAME', "NONAME")
     name = alias_name
@@ -34,12 +34,14 @@ def _printer(a,i,o,e):
 
 @aliases.register('ca-th')
 def _cath(a,i,o,e):
+    """Callable alias: threadable=default."""
     _printer(a,i,o,e)
 
 
 @aliases.register('ca-unth')
 @unthreadable
 def _cath2(a,i,o,e):
+    """Callable alias: threadable=unthreadable."""
     _printer(a,i,o,e)
 
 
@@ -47,19 +49,23 @@ def _cath2(a,i,o,e):
 @unthreadable
 @uncapturable
 def _cath3(a,i,o,e):
+    """Callable alias: threadable=unthreadable+uncapturable."""
     _printer(a,i,o,e)
 
 
 @aliases.register('ca-th-in')
 def _cath4(a,i,o,e):
+    """Callable alias: threadable=default with `input()` request."""
     _printer(a,i,o,e)
     try:
-        o=input('Input: ')
+        o = input('Input: ')
         print('Got input:', repr(o))
     except Exception as e:
         print('Input error:', e)
 
 @aliases.register('ca-th-sudo')
 def _cath5(a,i,o,e):
+    """Callable alias: threadable=default with `sudo -k echo 123` request."""
     _printer(a,i,o,e)
     sudo -k echo 123
+
