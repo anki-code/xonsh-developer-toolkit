@@ -105,7 +105,245 @@ The easiest way to start contribute to xonsh core:
 
 ### Tools for modeling the process behavior
 
-* `echo` - simple capturable and thredable process.
-* `fzf` - complex app that read STDIN, print TUI to STDERR, read terminal input from /dev/tty, print result to STDOUT.
-* `sudo -k ls` - command that show password prompt to `/dev/tty` and runs process that could be capturable or uncapturable.
-* `echo 123 | less` - pipe capturable process to uncapturable process.
+```xsh
+echo 1 # Simple capturable and thredable process.
+fzf  # Complex app that read STDIN, print TUI to STDERR, read terminal input from /dev/tty, print result to STDOUT.
+sudo -k ls # Command that show password prompt to `/dev/tty` and runs process that could be capturable or uncapturable.
+echo 123 | less  # Pipe capturable process to uncapturable process.
+sleep 10  # Tool that are easy to run in background and interrupt.
+python -c 'input()'  # Easy way to run unkillable (in some cases) input-blocked app.
+python -c 'import os, signal, time; time.sleep(0.2); os.kill(os.getpid(), signal.SIGTTIN)'  # Self-signaling.
+python -c '__import__('sys').exit(2)'  # Exiting with exit code.
+```
+
+
+### Test in pure Linux environment
+```xsh
+docker run --rm -it xonsh/xonsh:slim bash -c "pip install -U 'xonsh[full]' && xonsh"
+# a1b2c3  # docker container id
+apt update && apt install -y vim git procps strace  # to run `ps`
+```
+```xsh
+# Connect to container from other terminal:
+docker exec -it a1b2c3 bash
+```
+```xsh
+# Save docker container state to reuse:
+docker ps
+docker commit c3f279d17e0a local/my_xonsh  # the same for update
+docker run --rm -it local/my_xonsh xonsh
+```
+Trace signals with `strace`:
+```xsh
+python -c 'input()' & 
+# pid 123
+strace -p 123
+# strace: Process 123 attached
+# [ Process PID=123 runs in x32 mode. ]
+# --- stopped by SIGTTIN ---
+kill -SIGCONT 72  # From another terminal.
+# --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=48, si_uid=0} ---
+# syscall_0x7ffffff90558(0x5555555c5a00, 0, 0x7fffff634940, 0, 0, 0x3f) = 0x2
+# --- SIGTTIN {si_signo=SIGTTIN, si_code=SI_KERNEL} ---
+# --- stopped by SIGTTIN ---
+```
+
+### Monitor process state codes (STAT)
+```xsh
+ps ax  # Tool to monitor processes and have the process state in STAT column.
+```
+```
+# STAT:
+D    uninterruptible sleep (usually IO)
+R    running or runnable (on run queue)
+S    interruptible sleep (waiting for an event to complete)
+T    stopped, either by a job control signal or because it is being traced.
+W    paging (not valid since the 2.6.xx kernel)
+X    dead (should never be seen)
+Z    defunct ("zombie") process, terminated but not reaped by its parent.
+```
+
+### Hot to send [signals](https://man7.org/linux/man-pages/man7/signal.7.html)
+```xsh
+ps ax | grep fzf   # get pid=123
+kill -SIGINT 123
+kill -SIGCONT 123
+
+watch -n1 'ps ax | grep fzf'  # Monitor process state after sending signals (STAT).
+```
+
+### Decode process signals from [`os.waitpid`](https://docs.python.org/3/library/os.html#os.waitpid)
+
+UPD: This moved to `xonsh.tools.describe_waitpid_status` and enriched.
+
+```xsh
+pid, proc_status = os.waitpid(pid_of_child_process, os.WUNTRACED)
+
+# WILL BE IN: from xonsh.tools import describe_waitpid_status
+def describe_waitpid_status(proc_status):
+    """https://docs.python.org/3/library/os.html#os.waitpid"""
+    import os
+    funcs = [os.WIFEXITED, os.WEXITSTATUS, os.WIFSIGNALED, os.WTERMSIG, os.WIFSTOPPED, os.WSTOPSIG]
+    for f in funcs:
+        print(f.__name__, '-', f(proc_status), '-', f.__doc__)
+
+describe_waitpid_status(proc_status=5759)
+# WIFEXITED - False - Return True if the process returning status exited via the exit() system call.
+# WEXITSTATUS - 22 - Return the process return code from status.
+# WIFSIGNALED - False - Return True if the process returning status was terminated by a signal.
+# WTERMSIG - 127 - Return the signal that terminated the process that provided the status value.
+# WIFSTOPPED - True - Return True if the process returning status was stopped.
+# WSTOPSIG - 22 - Return the signal that stopped the process that provided the status value.
+```
+
+### Python app to test catching all signals 
+
+```xsh
+#!/usr/bin/env python
+
+import os, sys, signal, time
+from datetime import datetime
+
+ASK_INPUT = True
+OUTPUT_FILE = '/tmp/sig'  # Use `tail -f /tmp/sig` to monitor the process.
+
+def log(msg, file=sys.stdout):
+    current_datetime = datetime.now()
+    iso_date = current_datetime.isoformat()
+    print(f"{os.getpid()} {iso_date} {msg}", file=file)
+
+def get_signal_name(signum):
+    for name in dir(signal):
+        if name.startswith("SIG") and getattr(signal, name) == signum:
+            return name
+    return ""
+
+def main():
+    if file:
+        with open(file, 'a') as f:
+            log(f"start catching", file=f)
+
+    def signal_handler(signum, frame):
+        if file:
+            with open(OUTPUT_FILE, 'a') as f:
+                log(f"signal {signum} {get_signal_name(signum)}", file=f)
+        log(f"signal {signum} {get_signal_name(signum)}", file=sys.stdout)
+
+    # Set handlers for all signals.
+    for sig in range(1, signal.NSIG):
+        # Skip system signals.
+        if sig in [signal.SIGKILL, signal.SIGSTOP, signal.SIGINT]:
+            continue
+
+        # You may remove this if needed.
+        if sig in [signal.SIGINT]:
+            continue
+
+        try:
+            signal.signal(sig, signal_handler)
+        except (ValueError, OSError) as e:
+            log(f"exception on setting signal {sig} {get_signal_name(sig)}: {e}", file=f)
+
+    log(f"start catching")
+
+    i = 0
+    while True:
+        if ASK_INPUT:
+            # Low level method
+            os.read(0, 1024)
+            # High level method
+            # print(repr(input('Input:')))
+            sys.exit()
+        else:
+            log(f'sleep {i}')
+            if echo_sleep:
+                time.sleep(1)
+
+        i += 1
+
+if __name__ == "__main__":
+    main()
+
+```
+*Note! We read in the manual that "Python signal handlers are always executed in the main Python thread of the main interpreter, even if the signal was received in another thread." ([source](https://docs.python.org/3/library/signal.html#signals-and-threads)). But this is not related to situation when we run subprocess. First of all the signal (e.g. SIGINT) will go to foreground subprocess task. So you need to test this carefully for case main_thread+thread+popen_subprocess.*
+
+### Stress test
+
+```xsh
+while !(python -c 'import sys; sys.exit(1)') != 0:
+    print('.', end='')
+```
+
+### Test using bash process manager
+
+You can test any case around processes and signals using bash pipes and streams [*](http://curiousthing.org/sigttin-sigttou-deep-dive-linux):
+```xsh
+bash
+sleep 100 &
+# [1] 332211
+jobs
+# [1]  + running    sleep 100
+ps ax | grep sleep  # pid=332211
+# 332211 s005  SN     0:00.00 sleep 100
+kill -SIGINT 332211
+
+fzf 2>/dev/null &  # run fzf with hidden TUI (fzf is using stderr to show it)
+fzf < /dev/null &  # disable stdin
+ps fzf | grep fzf
+# etc etc etc
+```
+
+### You should know about sigmask
+
+Process by itself can catch signals. The [sigmask](https://www.gnu.org/software/libc/manual/html_node/Process-Signal-Mask.html) is describing what signals process intended to catch. I used [sigmask tool](github.com/r4um/sigmask) to decrypt `fzf` sigmask:
+
+```xsh
+apt install -y golang-go
+go get -v github.com/r4um/sigmask
+ps ax | grep fzf  # pid=123
+
+~/go/bin/sigmask 123  # SigCgt - signals that process wants to catch by itself.
+# SigPnd
+# ShdPnd
+# SigBlk SIGUSR1,SIGUSR2,SIGPIPE,SIGALRM,SIGTSTP,SIGTTIN,SIGTTOU,SIGURG,SIGXCPU,SIGXFSZ,SIGVTALRM,SIGIO,SIGPWR,SIGRTMIN
+# SigIgn
+# SigCgt SIGHUP,SIGINT,SIGQUIT,SIGILL,SIGTRAP,SIGABRT,SIGBUS,SIGFPE,SIGUSR1,SIGSEGV,SIGUSR2,SIGPIPE,SIGALRM,SIGTERM,SIGSTKFLT
+```
+
+### Trace xonsh code using [xunter](https://github.com/anki-code/xunter/)
+```xsh
+mkdir -p ~/git/ && cd ~/git/
+git clone git+https://github.com/xonsh/xonsh
+cd xonsh
+xunter --no-rc ++cwd ++filter 'Q(filename_has="procs/")' ++output /tmp/procs.xun
+# In another terminal:
+tail -f /tmp/procs.xun
+```
+
+### Interesting case for tracing
+
+#### Sleep
+```xsh
+for i in range(5):
+    print(i)
+    sleep 10
+```
+After Ctrl-c we have continue with the next iteration. It's annoying. Here is the related code:
+
+https://github.com/xonsh/xonsh/blob/26c6e119e259ee6eac990233f8b0710cb67ea6b2/xonsh/jobs.py#L269-L288
+
+When we run `sleep 10` the system process go to wait and we stuck on `os.waitpid`. After pressing `Ctrl+C` (sending SIGINT) process get the SIGINT signal and we catch that signal appeared using `WIFSIGNALED` (line 281) but have no actions about stopping the execution entirely and we continue execution.
+It would be cool to considering the cases around this (i.e. can we really stop the execution of the whole code?) and stopping the execution carefully here. 
+
+#### Input
+
+```xsh
+@aliases.register("mysudo")
+def _mysudo():
+    input("Password:")
+    echo 123
+
+mysudo | grep 1
+```
+
+I expect the behavior like `$(sudo -k echo 123 | grep 1)` where you can enter the password and then got captured 123. But it's not working. Tracing this in IDE is very interesting.
