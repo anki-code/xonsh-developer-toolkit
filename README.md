@@ -290,6 +290,10 @@ mysudo | grep 1
 
 I expect the behavior like `$(sudo -k echo 123 | grep 1)` where you can enter the password and then got captured 123. But it's not working. Tracing this in IDE is very interesting.
 
+### Test xonsh script with Github Actions
+
+https://github.com/anki-code/xonsh-developer-toolkit/blob/main/.github/workflows/python-app.yml
+
 ## See also
 
 * [xonsh-developer-toolkit](https://github.com/anki-code/xonsh-developer-toolkit) - The xonsh developer toolkit contains all spectrum of instrument to develop xonsh shell.
