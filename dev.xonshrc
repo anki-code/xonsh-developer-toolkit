@@ -1,3 +1,5 @@
+"""Xonsh Developer Toolkit: callable alias (callias) development."""
+
 import sys, os, inspect
 from xonsh.tools import unthreadable, uncapturable
 from xonsh.built_ins import XSH
