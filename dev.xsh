@@ -1,4 +1,4 @@
-"""Xonsh Developer Toolkit: callable alias (callias) development."""
+"""Xonsh Developer Toolkit RC file."""
 
 # $XONSH_SHOW_TRACEBACK=1
 # $XONSH_TRACE_SUBPROC=2
