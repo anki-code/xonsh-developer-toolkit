@@ -29,6 +29,7 @@ jobs:
       run: |
         echo Testing...
         export XONSH_SHOW_TRACEBACK=True
+        export RAISE_SUBPROC_ERROR=True
         xonsh --rc dev.xsh
         #r=$(xonsh -c "xontrib load $xontrib_name" 2>&1 || true)
         #echo Test output: $r
