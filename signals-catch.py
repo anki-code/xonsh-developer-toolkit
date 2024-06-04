@@ -4,6 +4,7 @@ import os, sys, signal, time
 from datetime import datetime
 
 ASK_INPUT = True
+SLEEP_SEC = 0
 OUTPUT_FILE = '/tmp/sig'  # Use `tail -f /tmp/sig` to monitor the process.
 
 def log(msg, file=sys.stdout):
@@ -55,8 +56,8 @@ def main():
             sys.exit()
         else:
             log(f'sleep {i}')
-            if echo_sleep:
-                time.sleep(1)
+            if SLEEP_SEC:
+                time.sleep(SLEEP_SEC)
 
         i += 1
 
