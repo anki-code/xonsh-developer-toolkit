@@ -18,12 +18,12 @@ def get_signal_name(signum):
     return ""
 
 def main():
-    if file:
-        with open(file, 'a') as f:
+    if OUTPUT_FILE:
+        with open(OUTPUT_FILE, 'a') as f:
             log(f"start catching", file=f)
 
     def signal_handler(signum, frame):
-        if file:
+        if OUTPUT_FILE:
             with open(OUTPUT_FILE, 'a') as f:
                 log(f"signal {signum} {get_signal_name(signum)}", file=f)
         log(f"signal {signum} {get_signal_name(signum)}", file=sys.stdout)
