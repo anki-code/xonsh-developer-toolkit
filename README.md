@@ -132,6 +132,13 @@ python -c '__import__('sys').exit(2)'  # Exiting with exit code.
 
 ```
 xonsh --rc ~/git/xonsh-developer-toolkit/callias.xsh
+ca-th?
+# Callable alias: threadable=default.
+
+ca-th-in?
+# Callable alias: threadable=default with `input()` request.
+
+ca-th-in | head
 ```
 
 ### Test in pure Linux environment
