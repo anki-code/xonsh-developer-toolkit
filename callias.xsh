@@ -17,8 +17,7 @@ def _print_to_tty(message):
 
 def _printer(a,i,o,e):
     """Print into all kinds of streams."""
-    func_name = inspect.stack()[0][3]
-    alias_name = XSH.env.get('__ALIAS_NAME', "NONAME")
+    alias_name = XSH.env.get('__ALIAS_NAME', inspect.stack()[0][3])
     name = alias_name
     print(f"{name}: alias.stdout", file=o)
     print(f"{name}: alias.stderr", file=e)
