@@ -174,26 +174,20 @@ watch -n1 'ps ax | grep fzf'  # Monitor process state after sending signals (STA
 
 ### Decode process signals from [`os.waitpid`](https://docs.python.org/3/library/os.html#os.waitpid)
 
-UPD: This moved to `xonsh.tools.describe_waitpid_status` and enriched.
-
 ```xsh
-pid, proc_status = os.waitpid(pid_of_child_process, os.WUNTRACED)
+# pid, proc_status = os.waitpid(pid_of_child_process, os.WUNTRACED)
+# 123, 5759
 
-# WILL BE IN: from xonsh.tools import describe_waitpid_status
-def describe_waitpid_status(proc_status):
-    """https://docs.python.org/3/library/os.html#os.waitpid"""
-    import os
-    funcs = [os.WIFEXITED, os.WEXITSTATUS, os.WIFSIGNALED, os.WTERMSIG, os.WIFSTOPPED, os.WSTOPSIG]
-    for f in funcs:
-        print(f.__name__, '-', f(proc_status), '-', f.__doc__)
+from xonsh.tools import describe_waitpid_status
+describe_waitpid_status(5759)
 
-describe_waitpid_status(proc_status=5759)
-# WIFEXITED - False - Return True if the process returning status exited via the exit() system call.
-# WEXITSTATUS - 22 - Return the process return code from status.
-# WIFSIGNALED - False - Return True if the process returning status was terminated by a signal.
-# WTERMSIG - 127 - Return the signal that terminated the process that provided the status value.
-# WIFSTOPPED - True - Return True if the process returning status was stopped.
-# WSTOPSIG - 22 - Return the signal that stopped the process that provided the status value.
+WIFEXITED - False  - Return True if the process returning status exited via the exit() system call.
+WEXITSTATUS - 22 SIGTTOU - Return the process return code from status.
+WIFSIGNALED - False  - Return True if the process returning status was terminated by a signal.
+WTERMSIG - 127  - Return the signal that terminated the process that provided the status value.
+WIFSTOPPED - True  - Return True if the process returning status was stopped.
+WSTOPSIG - 22 SIGTTOU - Return the signal that stopped the process that provided the status value.
+WCOREDUMP - False  - Return True if the process returning status was dumped to a core file.
 ```
 
 ### Python app to test catching all signals 
