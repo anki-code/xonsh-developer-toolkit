@@ -8,4 +8,4 @@ from xonsh.built_ins import XSH
 # $XONSH_TRACE_SUBPROC=2
 # $RAISE_SUBPROC_ERROR=1
 
-source dev_callias.xsh
+source callias.xsh
