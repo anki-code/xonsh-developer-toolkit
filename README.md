@@ -11,6 +11,9 @@ If you like the idea click ⭐ on the repo and <a href="https://twitter.com/inte
 ```xsh
 mkdir ~/git && cd ~/git
 git clone git@github.com:anki-code/xonsh-developer-toolkit.git
+```
+Usage:
+```xsh
 xonsh --rc ~/git/xonsh-developer-toolkit/dev.xonshrc
 ```
 
