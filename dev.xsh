@@ -4,4 +4,5 @@
 # $XONSH_TRACE_SUBPROC=2
 # $RAISE_SUBPROC_ERROR=1
 
-source callias.xsh
+cwd = pf'{__file__}'.parent
+source @(cwd)/callias.xsh
