@@ -30,7 +30,7 @@ def _printer(a,i,o,e):
     echo @(f"{name}: echo")
     ![echo @(f"{name}: ![echo]")]
     $[echo @(f"{name}: $[echo]")]
-    _print_to_tty(f"{name}: tty")
+    _print_to_tty(f"{name}: tty")  # Use `$[]` to solve "Inappropriate ioctl for device".
     !(echo @(f"{name}: !() THIS MUST BE CAPTURED IF YOU SEE THIS IT IS ISSUE"))
     $(echo @(f"{name}: $() THIS MUST BE CAPTURED IF YOU SEE THIS IT IS ISSUE"))
 
