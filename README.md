@@ -6,7 +6,7 @@ The xonsh developer toolkit contains all spectrum of instrument to develop xonsh
 If you like the idea click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20xontrib%20for%20the%20xonsh%20shell!&url=https://github.com/anki-code/xontrib-jump-to-dir" target="_blank">tweet</a>.
 </p>
 
-## State: it's stream of notes and drafts now
+State: it's stream of notes and drafts now.
 
 ### The fastest workflow to contribute to xonsh
 
