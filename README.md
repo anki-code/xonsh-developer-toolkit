@@ -8,20 +8,6 @@ If you like the idea click ⭐ on the repo and <a href="https://twitter.com/inte
 
 ## State: it's stream of notes and drafts now
 
-## Xonsh Development Toolkit
-
-Install:
-```xsh
-mkdir ~/git && cd ~/git
-git clone git@github.com:anki-code/xonsh-developer-toolkit.git
-```
-Usage:
-```xsh
-xonsh --rc ~/git/xonsh-developer-toolkit/dev.xsh
-```
-
-## Create development environment
-
 ### The fastest workflow to contribute to xonsh
 
 ```xsh
@@ -307,6 +293,18 @@ I expect the behavior like `$(sudo -k echo 123 | grep 1)` where you can enter th
 ### Test xonsh script with Github Actions
 
 https://github.com/anki-code/xonsh-developer-toolkit/blob/main/.github/workflows/python-app.yml
+
+## Xonsh Development Toolkit
+
+Install:
+```xsh
+mkdir ~/git && cd ~/git
+git clone git@github.com:anki-code/xonsh-developer-toolkit.git
+```
+Usage:
+```xsh
+xonsh --rc ~/git/xonsh-developer-toolkit/dev.xsh
+```
 
 ## See also
 
