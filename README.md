@@ -97,6 +97,8 @@ The easiest way to start contribute to xonsh core:
 * Research
   * [Stackoverflow questions around subprocess Popen and PIPE](https://stackoverflow.com/search?tab=newest&q=code%3a%22popen%22%20code%3a%22subprocess%22%20code%3a%22PIPE%22%20answers%3a1&searchOn=3)
   * [Github code around subprocess Popen and PIPE](https://github.com/search?q=Popen+PIPE+language%3APython&type=code&l=Python)
+* Processes
+  * [The Unix process API is unreliable and unsafe](https://catern.com/process.html) 
 
 ## Pointers
 
@@ -305,6 +307,12 @@ Usage:
 ```xsh
 xonsh --rc ~/git/xonsh-developer-toolkit/dev.xsh
 ```
+
+## Tools
+
+* [duct.py](https://github.com/oconnor663/duct.py/blob/master/gotchas.md) - a Python library for running child processes 
+* https://github.com/goodboy/tractor
+* https://dramatiq.io/ - is a background task processing library for Python with a focus on simplicity, reliability and performance.
 
 ## See also
 
