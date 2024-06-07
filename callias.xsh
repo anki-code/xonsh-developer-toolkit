@@ -31,7 +31,8 @@ def _printer(a,i,o,e):
     print(f"{name}: alias.stderr", file=e)
     print(f"{name}: sys.stdout", file=sys.stdout)
     print(f"{name}: sys.stderr", file=sys.stderr)
-    echo @(f"{name}: echo")
+    echo @(f"{name}: echo stdout")
+    echo @(f"{name}: echo stderr") o>e
     ![echo @(f"{name}: ![echo]")]
     $[echo @(f"{name}: $[echo]")]
     _print_to_tty(f"{name}: tty")  # Use `$[]` to solve "Inappropriate ioctl for device".
