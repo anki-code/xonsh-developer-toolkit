@@ -6,7 +6,11 @@ from xonsh.built_ins import XSH
 
 
 def _print_to_tty(message):
-    """Print message directly to TTY."""
+    """
+    Print message directly to TTY.
+    If you will try to put this function into the python file and run in bash `python file.py > /tmp/output`
+    you will have "Inappropriate ioctl for device" so this means that redirecting stdout disable TTY.
+    """
     try:
         tty_name = os.ttyname(sys.stdout.fileno())
         with open(tty_name, 'w') as tty:
