@@ -27,17 +27,18 @@ def _printer(a,i,o,e):
     except:
         name = "NONAME"
 
-    print(f"{name}: alias.stdout", file=o)
-    print(f"{name}: alias.stderr", file=e)
-    print(f"{name}: sys.stdout", file=sys.stdout)
-    print(f"{name}: sys.stderr", file=sys.stderr)
-    echo @(f"{name}: echo stdout")
-    echo @(f"{name}: echo stderr") o>e
-    ![echo @(f"{name}: ![echo]")]
-    $[echo @(f"{name}: $[echo]")]
-    _print_to_tty(f"{name}: tty")  # Use `$[]` to solve "Inappropriate ioctl for device".
+    print(f"{name}: out alias.stdout", file=o)
+    print(f"{name}: err alias.stderr", file=e)
+    print(f"{name}: out sys.stdout", file=sys.stdout)
+    print(f"{name}: err sys.stderr", file=sys.stderr)
+    echo @(f"{name}: out echo stdout")
+    echo @(f"{name}: err echo stderr") o>e
+    ![echo @(f"{name}: out ![echo]")]
+    $[echo @(f"{name}: out $[echo]")]
+    _print_to_tty(f"{name}: out tty")  # Use `$[]` to solve "Inappropriate ioctl for device".
     !(echo @(f"{name}: !() THIS MUST BE CAPTURED IF YOU SEE THIS IT IS ISSUE"))
-    $(echo @(f"{name}: $() THIS MUST BE CAPTURED IF YOU SEE THIS IT IS ISSUE"))
+    !(echo @(f"{name}: !(o>e) THIS MUST BE CAPTURED IF YOU SEE THIS IT IS ISSUE") o>e)
+    $(echo @(f"{name}: err $(o>e)") o>e)
 
 
 def _input():
