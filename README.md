@@ -6,9 +6,19 @@ The xonsh developer toolkit contains all spectrum of instrument to develop xonsh
 If you like the idea click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=Nice%20xontrib%20for%20the%20xonsh%20shell!&url=https://github.com/anki-code/xontrib-jump-to-dir" target="_blank">tweet</a>.
 </p>
 
-State: it's stream of notes and drafts now.
+## Become xonsh contributor
 
-### The fastest workflow to contribute to xonsh
+### Create a xontrib
+
+Create your xontrib step by step from [xontrib-template](https://github.com/xonsh/xontrib-template).
+
+Best xontribs:
+* [Xontribs on Github](https://github.com/topics/xontrib)
+* [Awesome xontribs](https://github.com/xonsh/awesome-xontribs)
+
+Or choose an [idea](https://github.com/xonsh/xontrib-template/issues?q=is%3Aopen+is%3Aissue+label%3Aidea+sort%3Areactions-%2B1-desc).
+
+### The simplified workflow to contribute to xonsh core
 
 ```xsh
 mkdir -p ~/git && cd ~/git
@@ -47,7 +57,7 @@ git push
 # Create PR: https://github.com/xonsh/xonsh/pulls
 ```
 
-### IDE
+### Setup IDE
 
 #### PyCharm
 
@@ -78,32 +88,45 @@ The easiest way to start contribute to xonsh core:
 5. Create git branch and solve [good first issue](https://github.com/xonsh/xonsh/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22+sort%3Areactions-%2B1-desc) or [popular issue](https://github.com/xonsh/xonsh/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc).
 6. Create pull request to xonsh.
 
-## Docs
+## Xonsh code
 
-* TTY
-  * [The TTY demystified](https://www.linusakesson.net/programming/tty/)
-* Signals
-  * [A Deep Dive into the SIGTTIN / SIGTTOU Terminal Access Control Mechanism in Linux](http://curiousthing.org/sigttin-sigttou-deep-dive-linux) 
-  * [Job Control Signals](https://www.gnu.org/software/libc/manual/html_node/Job-Control-Signals.html) and [Access to the Controlling Terminal](https://www.gnu.org/software/libc/manual/html_node/Access-to-the-Terminal.html)
-  * [man signal - Standard signals](https://man7.org/linux/man-pages/man7/signal.7.html)
-  * [Process Signal Mask](https://www.gnu.org/software/libc/manual/html_node/Process-Signal-Mask.html)
-  * [Helpful things for knight: basic docs, tools](https://github.com/xonsh/xonsh/pull/5361#issuecomment-2078826181)
-  * [SIGINT with multiple threads, each of which has a popen process](https://stackoverflow.com/questions/61854884/c-sigint-handler-not-working-with-multiple-threads-each-of-which-has-a-popen)
-* Python threads
-  * [Python: signals and threads](https://docs.python.org/3/library/signal.html#signals-and-threads): "Python signal handlers are always executed in the main Python thread of the main interpreter, even if the signal was received in another thread" 
-  * [In Python, what are the cons of calling os.waitpid in a program with multiple threads?](https://stackoverflow.com/questions/5691309/in-python-what-are-the-cons-of-calling-os-waitpid-in-a-program-with-multiple-th)
-* Misc
-  * [fzf source code: Render UI directly to /dev/tty](https://github.com/junegunn/fzf/commit/d274d093afa667a6ac5ee34579807de195ade784)
-* Research
-  * [Stackoverflow questions around subprocess Popen and PIPE](https://stackoverflow.com/search?tab=newest&q=code%3a%22popen%22%20code%3a%22subprocess%22%20code%3a%22PIPE%22%20answers%3a1&searchOn=3)
-  * [Github code around subprocess Popen and PIPE](https://github.com/search?q=Popen+PIPE+language%3APython&type=code&l=Python)
-* Processes
-  * [The Unix process API is unreliable and unsafe](https://catern.com/process.html) 
-
-## Pointers
+### Pointers
 
 * The main loop for interactive prompt: `main.py` -> `shell.shell.cmdloop()`.
 * The main function to run subprocess: `procs/specs.py` -> `run_subproc`.
+
+## Pure environment
+
+### Test in pure Linux environment
+```xsh
+docker run --rm -it xonsh/xonsh:slim bash -c "pip install -U 'xonsh[full]' && xonsh"
+# a1b2c3  # docker container id
+apt update && apt install -y vim git procps strace  # to run `ps`
+```
+```xsh
+# Connect to container from other terminal:
+docker exec -it a1b2c3 bash
+```
+```xsh
+# Save docker container state to reuse:
+docker ps
+docker commit c3f279d17e0a local/my_xonsh  # the same for update
+docker run --rm -it local/my_xonsh xonsh
+```
+Trace signals with `strace`:
+```xsh
+python -c 'input()' & 
+# pid 123
+strace -p 123
+# strace: Process 123 attached
+# [ Process PID=123 runs in x32 mode. ]
+# --- stopped by SIGTTIN ---
+kill -SIGCONT 72  # From another terminal.
+# --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=48, si_uid=0} ---
+# syscall_0x7ffffff90558(0x5555555c5a00, 0, 0x7fffff634940, 0, 0, 0x3f) = 0x2
+# --- SIGTTIN {si_signo=SIGTTIN, si_code=SI_KERNEL} ---
+# --- stopped by SIGTTIN ---
+```
 
 ## Capturing: stdout, stderr, tty
 
@@ -139,40 +162,32 @@ ps fzf | grep fzf
 # etc etc etc
 ```
 
-## Pure environment
-
-### Test in pure Linux environment
-```xsh
-docker run --rm -it xonsh/xonsh:slim bash -c "pip install -U 'xonsh[full]' && xonsh"
-# a1b2c3  # docker container id
-apt update && apt install -y vim git procps strace  # to run `ps`
-```
-```xsh
-# Connect to container from other terminal:
-docker exec -it a1b2c3 bash
-```
-```xsh
-# Save docker container state to reuse:
-docker ps
-docker commit c3f279d17e0a local/my_xonsh  # the same for update
-docker run --rm -it local/my_xonsh xonsh
-```
-Trace signals with `strace`:
-```xsh
-python -c 'input()' & 
-# pid 123
-strace -p 123
-# strace: Process 123 attached
-# [ Process PID=123 runs in x32 mode. ]
-# --- stopped by SIGTTIN ---
-kill -SIGCONT 72  # From another terminal.
-# --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=48, si_uid=0} ---
-# syscall_0x7ffffff90558(0x5555555c5a00, 0, 0x7fffff634940, 0, 0, 0x3f) = 0x2
-# --- SIGTTIN {si_signo=SIGTTIN, si_code=SI_KERNEL} ---
-# --- stopped by SIGTTIN ---
-```
-
 ## Process and subprocess
+
+### Docs
+
+## Docs
+
+* TTY
+  * [The TTY demystified](https://www.linusakesson.net/programming/tty/)
+* Signals
+  * [A Deep Dive into the SIGTTIN / SIGTTOU Terminal Access Control Mechanism in Linux](http://curiousthing.org/sigttin-sigttou-deep-dive-linux) 
+  * [Job Control Signals](https://www.gnu.org/software/libc/manual/html_node/Job-Control-Signals.html) and [Access to the Controlling Terminal](https://www.gnu.org/software/libc/manual/html_node/Access-to-the-Terminal.html)
+  * [man signal - Standard signals](https://man7.org/linux/man-pages/man7/signal.7.html)
+  * [Process Signal Mask](https://www.gnu.org/software/libc/manual/html_node/Process-Signal-Mask.html)
+  * [Helpful things for knight: basic docs, tools](https://github.com/xonsh/xonsh/pull/5361#issuecomment-2078826181)
+  * [SIGINT with multiple threads, each of which has a popen process](https://stackoverflow.com/questions/61854884/c-sigint-handler-not-working-with-multiple-threads-each-of-which-has-a-popen)
+* Python threads
+  * [Python: signals and threads](https://docs.python.org/3/library/signal.html#signals-and-threads): "Python signal handlers are always executed in the main Python thread of the main interpreter, even if the signal was received in another thread" 
+  * [In Python, what are the cons of calling os.waitpid in a program with multiple threads?](https://stackoverflow.com/questions/5691309/in-python-what-are-the-cons-of-calling-os-waitpid-in-a-program-with-multiple-th)
+* Misc
+  * [fzf source code: Render UI directly to /dev/tty](https://github.com/junegunn/fzf/commit/d274d093afa667a6ac5ee34579807de195ade784)
+* Research
+  * [Stackoverflow questions around subprocess Popen and PIPE](https://stackoverflow.com/search?tab=newest&q=code%3a%22popen%22%20code%3a%22subprocess%22%20code%3a%22PIPE%22%20answers%3a1&searchOn=3)
+  * [Github code around subprocess Popen and PIPE](https://github.com/search?q=Popen+PIPE+language%3APython&type=code&l=Python)
+* Processes
+  * [The Unix process API is unreliable and unsafe](https://catern.com/process.html) 
+
 
 ### Tools for modeling the process behavior
 
