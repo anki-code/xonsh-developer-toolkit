@@ -131,7 +131,7 @@ kill -SIGCONT 72  # From another terminal.
 
 ### Test capturing aliases
 
-```
+```xsh
 xonsh --rc ~/git/xonsh-developer-toolkit/callias.xsh
 ca-th?
 # Callable alias: threadable.
