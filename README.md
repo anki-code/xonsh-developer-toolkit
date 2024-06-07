@@ -8,16 +8,6 @@ If you like the idea click ⭐ on the repo and <a href="https://twitter.com/inte
 
 ## Become xonsh contributor
 
-### Create a xontrib
-
-Create your xontrib step by step from [xontrib-template](https://github.com/xonsh/xontrib-template).
-
-Best xontribs:
-* [Xontribs on Github](https://github.com/topics/xontrib)
-* [Awesome xontribs](https://github.com/xonsh/awesome-xontribs)
-
-Or choose an [idea](https://github.com/xonsh/xontrib-template/issues?q=is%3Aopen+is%3Aissue+label%3Aidea+sort%3Areactions-%2B1-desc).
-
 ### The simplified workflow to contribute to xonsh core
 
 ```xsh
@@ -88,12 +78,24 @@ The easiest way to start contribute to xonsh core:
 5. Create git branch and solve [good first issue](https://github.com/xonsh/xonsh/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22+sort%3Areactions-%2B1-desc) or [popular issue](https://github.com/xonsh/xonsh/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc).
 6. Create pull request to xonsh.
 
+### Create a xontrib
+
+Create your xontrib step by step from [xontrib-template](https://github.com/xonsh/xontrib-template).
+
+Best xontribs:
+* [Xontribs on Github](https://github.com/topics/xontrib)
+* [Awesome xontribs](https://github.com/xonsh/awesome-xontribs)
+
+Or choose an [idea](https://github.com/xonsh/xontrib-template/issues?q=is%3Aopen+is%3Aissue+label%3Aidea+sort%3Areactions-%2B1-desc).
+
 ## Xonsh code
 
 ### Pointers
 
 * The main loop for interactive prompt: `main.py` -> `shell.shell.cmdloop()`.
 * The main function to run subprocess: `procs/specs.py` -> `run_subproc`.
+* History backends are in `xonsh/history/`.
+* Environment variables are in `xonsh/environ.py`.
 
 ## Pure environment
 
