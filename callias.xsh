@@ -39,16 +39,25 @@ def _printer(a,i,o,e):
     $(echo @(f"{name}: $() THIS MUST BE CAPTURED IF YOU SEE THIS IT IS ISSUE"))
 
 
+def _input():
+    """Standard input."""
+    try:
+        o = input('Input: ')
+        print('Got input:', repr(o))
+    except Exception as e:
+        print('Input error:', e)
+
+
 @aliases.register('ca-th')
 def _cath(a,i,o,e):
-    """Callable alias: threadable=default."""
+    """Callias: threadable."""
     _printer(a,i,o,e)
 
 
 @aliases.register('ca-unth')
 @unthreadable
 def _cath2(a,i,o,e):
-    """Callable alias: threadable=unthreadable."""
+    """Callias: unthreadable."""
     _printer(a,i,o,e)
 
 
@@ -56,23 +65,26 @@ def _cath2(a,i,o,e):
 @unthreadable
 @uncapturable
 def _cath3(a,i,o,e):
-    """Callable alias: threadable=unthreadable+uncapturable."""
+    """Callias: unthreadable, uncapturable."""
     _printer(a,i,o,e)
 
 
 @aliases.register('ca-th-in')
 def _cath4(a,i,o,e):
-    """Callable alias: threadable=default with `input()` request."""
+    """Callias: threadable, input."""
     _printer(a,i,o,e)
-    try:
-        o = input('Input: ')
-        print('Got input:', repr(o))
-    except Exception as e:
-        print('Input error:', e)
+    _input()
+
+@aliases.register('ca-unth-in')
+@unthreadable
+def _cath5(a,i,o,e):
+    """Callias: unthredable, input."""
+    _printer(a,i,o,e)
+    _input()
 
 @aliases.register('ca-th-sudo')
-def _cath5(a,i,o,e):
-    """Callable alias: threadable=default with `sudo -k echo 123` request."""
+def _cath6(a,i,o,e):
+    """Callias: thredable, `sudo -k echo 123`."""
     _printer(a,i,o,e)
     sudo -k echo 123
 
