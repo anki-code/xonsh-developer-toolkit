@@ -342,7 +342,6 @@ xonsh --rc ~/git/xonsh-developer-toolkit/dev.xsh
 
 ## See also
 
-* [xonsh-developer-toolkit](https://github.com/anki-code/xonsh-developer-toolkit) - The xonsh developer toolkit contains all spectrum of instrument to develop xonsh shell.
 * [xontrib-template](https://github.com/xonsh/xontrib-template) - A template to create, packaging and promote xontrib in 5 minutes.
 * [xonsh-awesome-cli-app](https://github.com/anki-code/xonsh-awesome-cli-app) - Example of awesome cli app template for xonsh.
 * [macro](https://github.com/anki-code/xontrib-macro) - Library of the useful macro for the xonsh shell. 
