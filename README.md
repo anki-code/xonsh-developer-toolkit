@@ -80,13 +80,10 @@ The easiest way to start contribute to xonsh core:
 
 ### Create a xontrib
 
-Create your xontrib step by step from [xontrib-template](https://github.com/xonsh/xontrib-template).
-
-Best xontribs:
+Create your xontrib step by step from [xontrib-template](https://github.com/xonsh/xontrib-template). Best xontribs:
 * [Xontribs on Github](https://github.com/topics/xontrib)
 * [Awesome xontribs](https://github.com/xonsh/awesome-xontribs)
-
-Or choose an [idea](https://github.com/xonsh/xontrib-template/issues?q=is%3Aopen+is%3Aissue+label%3Aidea+sort%3Areactions-%2B1-desc).
+* Or choose an [idea](https://github.com/xonsh/xontrib-template/issues?q=is%3Aopen+is%3Aissue+label%3Aidea+sort%3Areactions-%2B1-desc).
 
 ## Xonsh code
 
