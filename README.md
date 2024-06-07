@@ -105,31 +105,41 @@ The easiest way to start contribute to xonsh core:
 * The main loop for interactive prompt: `main.py` -> `shell.shell.cmdloop()`.
 * The main function to run subprocess: `procs/specs.py` -> `run_subproc`.
 
-### Tools for modeling the process behavior
-
-```xsh
-echo 1 # Simple capturable and thredable process.
-fzf  # Complex app that read STDIN, print TUI to STDERR, read terminal input from /dev/tty, print result to STDOUT.
-sudo -k ls # Command that show password prompt to `/dev/tty` and runs process that could be capturable or uncapturable.
-echo 123 | less  # Pipe capturable process to uncapturable process.
-sleep 10  # Tool that are easy to run in background and interrupt.
-python -c 'input()'  # Easy way to run unkillable (in some cases) input-blocked app.
-python -c 'import os, signal, time; time.sleep(0.2); os.kill(os.getpid(), signal.SIGTTIN)'  # Self-signaling.
-python -c '__import__('sys').exit(2)'  # Exiting with exit code.
-```
+## Capturing: stdout, stderr, tty
 
 ### Test capturing aliases
 
 ```
 xonsh --rc ~/git/xonsh-developer-toolkit/callias.xsh
 ca-th?
-# Callable alias: threadable=default.
+# Callable alias: threadable.
 
 ca-th-in?
-# Callable alias: threadable=default with `input()` request.
+# Callable alias: threadable, input.
 
 ca-th-in | head
 ```
+
+### Test capturing using bash process manager
+
+You can test any case around processes and signals using bash pipes and streams [*](http://curiousthing.org/sigttin-sigttou-deep-dive-linux):
+```xsh
+bash
+sleep 100 &
+# [1] 332211
+jobs
+# [1]  + running    sleep 100
+ps ax | grep sleep  # pid=332211
+# 332211 s005  SN     0:00.00 sleep 100
+kill -SIGINT 332211
+
+fzf 2>/dev/null &  # run fzf with hidden TUI (fzf is using stderr to show it)
+fzf < /dev/null &  # disable stdin
+ps fzf | grep fzf
+# etc etc etc
+```
+
+## Pure environment
 
 ### Test in pure Linux environment
 ```xsh
@@ -160,6 +170,21 @@ kill -SIGCONT 72  # From another terminal.
 # syscall_0x7ffffff90558(0x5555555c5a00, 0, 0x7fffff634940, 0, 0, 0x3f) = 0x2
 # --- SIGTTIN {si_signo=SIGTTIN, si_code=SI_KERNEL} ---
 # --- stopped by SIGTTIN ---
+```
+
+## Process and subprocess
+
+### Tools for modeling the process behavior
+
+```xsh
+echo 1 # Simple capturable and thredable process.
+fzf  # Complex app that read STDIN, print TUI to STDERR, read terminal input from /dev/tty, print result to STDOUT.
+sudo -k ls # Command that show password prompt to `/dev/tty` and runs process that could be capturable or uncapturable.
+echo 123 | less  # Pipe capturable process to uncapturable process.
+sleep 10  # Tool that are easy to run in background and interrupt.
+python -c 'input()'  # Easy way to run unkillable (in some cases) input-blocked app.
+python -c 'import os, signal, time; time.sleep(0.2); os.kill(os.getpid(), signal.SIGTTIN)'  # Self-signaling.
+python -c '__import__('sys').exit(2)'  # Exiting with exit code.
 ```
 
 ### Monitor process state codes (STAT)
@@ -211,33 +236,8 @@ python singnals-catch.py
 ```
 *Note! We read in the manual that "Python signal handlers are always executed in the main Python thread of the main interpreter, even if the signal was received in another thread." ([source](https://docs.python.org/3/library/signal.html#signals-and-threads)). But this is not related to situation when we run subprocess. First of all the signal (e.g. SIGINT) will go to foreground subprocess task. So you need to test this carefully for case main_thread+thread+popen_subprocess.*
 
-### Stress test
 
-```xsh
-while !(python -c 'import sys; sys.exit(1)') != 0:
-    print('.', end='')
-```
-
-### Test using bash process manager
-
-You can test any case around processes and signals using bash pipes and streams [*](http://curiousthing.org/sigttin-sigttou-deep-dive-linux):
-```xsh
-bash
-sleep 100 &
-# [1] 332211
-jobs
-# [1]  + running    sleep 100
-ps ax | grep sleep  # pid=332211
-# 332211 s005  SN     0:00.00 sleep 100
-kill -SIGINT 332211
-
-fzf 2>/dev/null &  # run fzf with hidden TUI (fzf is using stderr to show it)
-fzf < /dev/null &  # disable stdin
-ps fzf | grep fzf
-# etc etc etc
-```
-
-### You should know about sigmask
+### Sigmask
 
 Process by itself can catch signals. The [sigmask](https://www.gnu.org/software/libc/manual/html_node/Process-Signal-Mask.html) is describing what signals process intended to catch. I used [sigmask tool](github.com/r4um/sigmask) to decrypt `fzf` sigmask:
 
@@ -253,6 +253,21 @@ ps ax | grep fzf  # pid=123
 # SigIgn
 # SigCgt SIGHUP,SIGINT,SIGQUIT,SIGILL,SIGTRAP,SIGABRT,SIGBUS,SIGFPE,SIGUSR1,SIGSEGV,SIGUSR2,SIGPIPE,SIGALRM,SIGTERM,SIGSTKFLT
 ```
+
+## Testing
+
+### Test xonsh script with Github Actions
+
+https://github.com/anki-code/xonsh-developer-toolkit/blob/main/.github/workflows/python-app.yml
+
+### Stress test
+
+```xsh
+while !(python -c 'import sys; sys.exit(1)') != 0:
+    print('.', end='')
+```
+
+## Trace
 
 ### Trace xonsh code using [xunter](https://github.com/anki-code/xunter/)
 ```xsh
@@ -292,9 +307,6 @@ mysudo | grep 1
 
 I expect the behavior like `$(sudo -k echo 123 | grep 1)` where you can enter the password and then got captured 123. But it's not working. Tracing this in IDE is very interesting.
 
-### Test xonsh script with Github Actions
-
-https://github.com/anki-code/xonsh-developer-toolkit/blob/main/.github/workflows/python-app.yml
 
 ## Xonsh Development Toolkit
 
