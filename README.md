@@ -94,7 +94,7 @@ Create your xontrib step by step from [xontrib-template](https://github.com/xons
 * History backends are in `xonsh/history/`.
 * Environment variables are in `xonsh/environ.py`.
 
-## Pure environment
+## xonsh in docker
 
 ### Test in pure Linux environment
 ```xsh
@@ -112,19 +112,12 @@ docker ps
 docker commit c3f279d17e0a local/my_xonsh  # the same for update
 docker run --rm -it local/my_xonsh xonsh
 ```
-Trace signals with `strace`:
+
+
+### Test old versions of xonsh
 ```xsh
-python -c 'input()' & 
-# pid 123
-strace -p 123
-# strace: Process 123 attached
-# [ Process PID=123 runs in x32 mode. ]
-# --- stopped by SIGTTIN ---
-kill -SIGCONT 72  # From another terminal.
-# --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=48, si_uid=0} ---
-# syscall_0x7ffffff90558(0x5555555c5a00, 0, 0x7fffff634940, 0, 0, 0x3f) = 0x2
-# --- SIGTTIN {si_signo=SIGTTIN, si_code=SI_KERNEL} ---
-# --- stopped by SIGTTIN ---
+docker run --rm -it python:3.6-slim-bullseye bash -c "pip install xonsh==0.5.0 && bash"
+xonsh
 ```
 
 ## Capturing: stdout, stderr, tty
@@ -266,6 +259,23 @@ ps ax | grep fzf  # pid=123
 # SigBlk SIGUSR1,SIGUSR2,SIGPIPE,SIGALRM,SIGTSTP,SIGTTIN,SIGTTOU,SIGURG,SIGXCPU,SIGXFSZ,SIGVTALRM,SIGIO,SIGPWR,SIGRTMIN
 # SigIgn
 # SigCgt SIGHUP,SIGINT,SIGQUIT,SIGILL,SIGTRAP,SIGABRT,SIGBUS,SIGFPE,SIGUSR1,SIGSEGV,SIGUSR2,SIGPIPE,SIGALRM,SIGTERM,SIGSTKFLT
+```
+
+### Trace signals with `strace`
+```xsh
+docker run --rm -it xonsh/xonsh:slim bash -c "pip install -U 'xonsh[full]' && xonsh"
+apt update && apt install -y vim git procps strace 
+python -c 'input()' & 
+# pid 123
+strace -p 123
+# strace: Process 123 attached
+# [ Process PID=123 runs in x32 mode. ]
+# --- stopped by SIGTTIN ---
+kill -SIGCONT 72  # From another terminal.
+# --- SIGCONT {si_signo=SIGCONT, si_code=SI_USER, si_pid=48, si_uid=0} ---
+# syscall_0x7ffffff90558(0x5555555c5a00, 0, 0x7fffff634940, 0, 0, 0x3f) = 0x2
+# --- SIGTTIN {si_signo=SIGTTIN, si_code=SI_KERNEL} ---
+# --- stopped by SIGTTIN ---
 ```
 
 ## Testing
