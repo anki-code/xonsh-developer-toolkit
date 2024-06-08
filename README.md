@@ -90,6 +90,7 @@ Create your xontrib step by step from [xontrib-template](https://github.com/xons
 ### Pointers
 
 * The main loop for interactive prompt: `main.py` -> `shell.shell.cmdloop()`.
+* Replacing `sys.std*` to catching with `Tee()`: `base_shell.py` -> `tee = Tee(encoding=enc, errors=err)`.
 * The main function to run subprocess: `procs/specs.py` -> `run_subproc`.
 * History backends are in `xonsh/history/`.
 * Environment variables are in `xonsh/environ.py`.
