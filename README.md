@@ -95,6 +95,12 @@ Create your xontrib step by step from [xontrib-template](https://github.com/xons
 * History backends are in `xonsh/history/`.
 * Environment variables are in `xonsh/environ.py`.
 
+### Exceptions
+
+#### `Bad file descriptor` or `I/O operation on closed file.`
+
+If you catch this when using callable alias first of all remember that callable alias runs in asynchronous thread and it's not needed to trace exactly this error. Instead of this you need to trace how executing is working and when descriptor is opened and when it closed. The common case is when main thread closes descriptor but child thread uses it later or vice versa. See also [5482](https://github.com/xonsh/xonsh/issues/5482).
+
 ## xonsh in docker
 
 ### Test in pure Linux environment
