@@ -14,6 +14,7 @@ If you like the idea click ⭐ on the repo and <a href="https://twitter.com/inte
 mkdir -p ~/git && cd ~/git
 # For example your name is `alex` and you forked https://github.com/xonsh/xonsh on Github
 git clone git@github.com:alex/xonsh.git
+# You can setup IDE (see next section) to extremely speed up the work and test.
 cd xonsh
 git checkout -b my_awesome_pr
 
