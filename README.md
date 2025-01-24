@@ -102,23 +102,23 @@ Create your xontrib step by step from [xontrib-template](https://github.com/xons
 
 If you catch this when using callable alias first of all remember that callable alias runs in asynchronous thread and it's not needed to trace exactly this error. Instead of this you need to trace how executing is working and when descriptor is opened and when it closed. The common case is when main thread closes descriptor but child thread uses it later or vice versa. See also [5482](https://github.com/xonsh/xonsh/issues/5482).
 
-## xonsh in docker
+## xonsh in podman (open source docker alternative)
 
 ### Test in pure Linux environment
 ```xsh
-docker run --rm -it xonsh/xonsh:slim bash -c "pip install -U 'xonsh[full]' && xonsh"
+podman run --rm -it xonsh/xonsh:slim bash -c "pip install -U 'xonsh[full]' && xonsh"
 # a1b2c3  # docker container id
 apt update && apt install -y vim git procps strace  # to run `ps`
 ```
 ```xsh
 # Connect to container from other terminal:
-docker exec -it a1b2c3 bash
+podman exec -it a1b2c3 bash
 ```
 ```xsh
 # Save docker container state to reuse:
-docker ps
-docker commit c3f279d17e0a local/my_xonsh  # the same for update
-docker run --rm -it local/my_xonsh xonsh
+podman ps
+podman commit c3f279d17e0a local/my_xonsh  # the same for update
+podman run --rm -it local/my_xonsh xonsh
 ```
 
 
