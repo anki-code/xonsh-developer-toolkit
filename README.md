@@ -177,9 +177,12 @@ ps fzf | grep fzf
   * [Process Signal Mask](https://www.gnu.org/software/libc/manual/html_node/Process-Signal-Mask.html)
   * [Helpful things for knight: basic docs, tools](https://github.com/xonsh/xonsh/pull/5361#issuecomment-2078826181)
   * [SIGINT with multiple threads, each of which has a popen process](https://stackoverflow.com/questions/61854884/c-sigint-handler-not-working-with-multiple-threads-each-of-which-has-a-popen)
+  * [Kill a Python subprocess and its children when a timeout is reached (Alexandra Zaharia)](https://alexandra-zaharia.github.io/posts/kill-subprocess-and-its-children-on-timeout-python/)
 * Python threads
   * [Python: signals and threads](https://docs.python.org/3/library/signal.html#signals-and-threads): "Python signal handlers are always executed in the main Python thread of the main interpreter, even if the signal was received in another thread" 
   * [In Python, what are the cons of calling os.waitpid in a program with multiple threads?](https://stackoverflow.com/questions/5691309/in-python-what-are-the-cons-of-calling-os-waitpid-in-a-program-with-multiple-th)
+  * [Popen from a thread simple example](https://stackoverflow.com/questions/984941/python-subprocess-popen-from-a-thread)
+  * [Are popen/pclose function thread-safe?](https://community.hpe.com/t5/operating-system-linux/are-popen-pclose-function-thread-safe/td-p/4657999)
 * Misc
   * [fzf source code: Render UI directly to /dev/tty](https://github.com/junegunn/fzf/commit/d274d093afa667a6ac5ee34579807de195ade784)
 * Research
