@@ -99,6 +99,7 @@ Parser
 
 Prompt
 * The main loop for interactive prompt: `main.py` -> `shell.shell.cmdloop()`.
+* Prompt-toolkit app: `__xonsh__.shell.shell.prompter.app`.
 
 History
 * History backends are in `xonsh/history/`.
