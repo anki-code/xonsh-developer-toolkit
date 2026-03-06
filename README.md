@@ -92,7 +92,7 @@ Create your xontrib step by step from [xontrib-template](https://github.com/xons
 ### Pointers
 
 Subprocess
-* Replacing `sys.std*` to catching with `Tee()`: `base_shell.py` -> `tee = Tee(encoding=enc, errors=err)`.
+* Replacing `sys.stdout`/`sys.stderr` to catching with `Tee()`: `base_shell.py` -> `tee = Tee(encoding=enc, errors=err)`.
 * The main function to run subprocess: `procs/specs.py` -> `run_subproc`.
 
 Parser
