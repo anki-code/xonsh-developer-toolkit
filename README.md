@@ -28,8 +28,9 @@ vim xonsh/environ.py
 git add xonsh/environ.py
 
 # Create test
+# Use `python -m pytest` to avoid using xonsh code from `site-packages` if xonsh was installed.
 vim tests/environ.py
-pytest tests/environ.py
+python -m pytest tests/environ.py  
 
 # Live test
 python -m xonsh --no-rc
