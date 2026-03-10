@@ -354,6 +354,18 @@ mysudo | grep 1
 
 I expect the behavior like `$(sudo -k echo 123 | grep 1)` where you can enter the password and then got captured 123. But it's not working. Tracing this in IDE is very interesting.
 
+## Test xonsh
+
+Test on NixOS:
+```xsh
+docker run --rm -it nixos/nix bash
+nix-shell -p python3
+python3 -m venv venv
+source venv/bin/activate
+pip install git+https://github.com/xonsh/xonsh@fix_nix  # any branch
+xonsh
+```
+
 
 ## Xonsh Development Toolkit
 
