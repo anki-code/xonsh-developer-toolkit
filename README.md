@@ -362,8 +362,12 @@ docker run --rm -it nixos/nix bash
 nix-shell -p python3
 python3 -m venv venv
 source venv/bin/activate
-pip install git+https://github.com/xonsh/xonsh@fix_nix  # any branch
-xonsh
+#pip install git+https://github.com/xonsh/xonsh@fix_nix  # any branch
+cd ~
+git clone https://github.com/xonsh/xonsh
+cd xonsh
+pip install '.[dev]' '.[test]'
+pytest
 ```
 
 
