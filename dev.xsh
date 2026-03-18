@@ -8,6 +8,12 @@ _cwd = pf'{__file__}'.parent
 source @(_cwd)/callias.xsh
 
 
+aliases |= {
+    # Run xonsh without environment for experimenting.
+    'xonsh-no-env': 'xonsh --no-rc --no-env -DPATH -DTERM -DHOME -DXONSH_SHOW_TRACEBACK=1',
+}
+
+
 @aliases.register
 def _docker_xonsh_branch(args):
     """Run docker container with xonsh from branch.
