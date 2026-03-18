@@ -6,3 +6,28 @@
 
 _cwd = pf'{__file__}'.parent
 source @(_cwd)/callias.xsh
+
+@aliases.register
+def _docker_xonsh_branch(args):
+    """Run docker container with xonsh from branch.
+    Usage: 
+      1. Copy branch url from PR.
+      2. `docker-xonsh-branch https://github.com/costajohnt/xonsh/tree/feat/completion-underline-highlight`
+    """
+    url = args[0]
+    m = @.imp.re.match(r"https://github.com/([^/]+)/([^/]+)/tree/(.+)", url)
+    if not m:
+        print("Invalid GitHub tree URL")
+        return
+
+    owner, repo, branch = m.groups()
+    git_url = f"https://github.com/{owner}/{repo}.git"
+
+    host = owner + '_' + repo + '_' + branch
+
+    docker run --rm -it -h @(host) xonsh/xonsh bash -lc @(f"""
+        set -e
+        git clone --depth 1 --single-branch --branch {branch} {git_url} /tmp/xonsh
+        pip install -e '/tmp/xonsh[full]'
+        exec bash
+        """)
