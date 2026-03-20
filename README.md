@@ -56,7 +56,7 @@ git push
 The easiest way to start contribute to xonsh core:
 
 1. Install IDE e.g. [PyCharm](https://www.jetbrains.com/pycharm/).
-2. Fork https://github.com/xonsh/xonsh and open in IDE.
+2. Go to File -> Project from Version Control -> URL https://github.com/xonsh/xonsh 
 3. Update pip and install full dependencies:
     ```xsh
     # Run from PyCharm terminal with appropriate environment.
