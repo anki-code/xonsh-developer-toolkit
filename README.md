@@ -12,35 +12,33 @@ If you like the idea click ⭐ on the repo and <a href="https://twitter.com/inte
 
 ```xsh
 mkdir -p ~/git && cd ~/git
-# For example your name is `alex` and you forked https://github.com/xonsh/xonsh on Github
-git clone git@github.com:alex/xonsh.git
+# For example your name is `snail` and you forked https://github.com/xonsh/xonsh on Github
+git clone git@github.com:snail/xonsh.git
 # You can setup IDE (see next section) to extremely speed up the work and test.
 cd xonsh
+
+# Set git user name. Without `--global` it will work in local repository.
+git config user.name "Snail"
+git config user.email "snail@email.com"
+
+# Create your feature or fix branch.
 git checkout -b my_awesome_pr
 
 # Install dev packages
 # python -m ensurepip --upgrade  # install pip if you have python without pip
 pip install -U pip
-pip install '.[dev]'
+pip install '.[dev]' '.[doc]'
 
 # Make changes: add new environment variable.
 vim xonsh/environ.py
 git add xonsh/environ.py
 
 # Create test
-# Use `python -m pytest` to avoid using xonsh code from `site-packages` if xonsh was installed.
 vim tests/environ.py
-python -m pytest tests/environ.py  
+python -m pytest
 
 # Live test
 python -m xonsh --no-rc
-
-# Create news file
-cd news
-cp TEMPLATE.rst my_new_env_var.rst
-vim my_new_env_var.rst
-git add my_new_env_var.rst
-cd ..
 
 # Push
 git commit -m "My new environment variable!"
